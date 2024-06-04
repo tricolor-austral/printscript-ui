@@ -10,7 +10,12 @@ import {FileType} from "../types/FileType.ts";
 const snippetOperations: SnippetOperations = new FakeSnippetOperations(); // TODO: Replace with your implementation
 
 export const useGetSnippets = (page: number = 0, pageSize: number = 10, snippetName?: string) => {
-  return useQuery<PaginatedSnippets, Error>(['listSnippets', page,pageSize,snippetName], () => snippetOperations.listSnippetDescriptors(page, pageSize,snippetName));
+  const url = `http://localhost:3000/shipments?page=${page}&pageSize=${pageSize}`;
+  const snippets = fetch(url, {
+    method: 'GET',
+    headers: {'Content-Type': 'application/json'},
+  });
+  return useQuery<PaginatedSnippets, Error>(['listSnippets', snippets], () => snippetOperations.listSnippetDescriptors(page, pageSize,snippetName));
 };
 
 export const useGetSnippetById = (id: string) => {
