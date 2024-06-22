@@ -9,9 +9,15 @@ import {FileType} from "../../types/FileType.ts";
 import {Rule} from "../../types/Rule.ts";
 import axios from 'axios';
 
-const DELAY: number = 1000
-const token = 'yJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkcyMTZhVzhlTHRtLTN4WC16YldQdSJ9.eyJpc3MiOiJodHRwczovL2Rldi15amkxaTV3cXB5cWRnMGUzLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw2NjU4ZTQwOGJkYzkzZGZmMDY2YWY0YzUiLCJhdWQiOiJodHRwczovL2luc2dpcy1wZXJtaXNzaW9uIiwiaWF0IjoxNzE3NzA2OTUxLCJleHAiOjE3MTc3OTMzNTEsImd0eSI6InBhc3N3b3JkIiwiYXpwIjoiWnpja0VMU0M1OHpQOW5vVDNYaldkRTlMVWUyZkVPRW0ifQ.g07MRt4PLwqJSYDpnEa71m7yc7ZY2ovUq2k8pB9mEbmiyz03qdMpy14vMMsEhwncG7GFq3-yezux1to5U0d6Ob_Os3f1al4_1pAHP_0Ijjzbv26d2usOKLlF4JifbLfH1_oo5zxFm_QKJgOaLKkrE0Ek7i5mZKutEbwohVYRNRwpQhuMSLmIidb7TcDsBdvFERqQQIc3tjeueW4tjdDrepBD1TckY4ZOfXKqJREEt0WbG1vybwSoaTDH2QMyjauw5-_miWJ_dsFPYVBUgXUlP_tTHH-96JMAVvt6lN3SoRdhgORRz9UOSLn3rbmm_ycVTAAPuDv2P_mtkonaSR6Atw'
-const BASE_URL = 'http://0110-200-10-109-202.ngrok-free.app/snippets'
+
+
+const DELAY: number = 1000;
+const token = localStorage.getItem('token')
+const userId = localStorage.getItem('userId')
+
+//use localhost
+const url = 'https://0e15-201-253-89-27.ngrok-free.app'
+const BASE_URL = `${url}/snippets`
 
 export class FakeSnippetOperations implements SnippetOperations {
   private readonly fakeStore = new FakeSnippetStore()
@@ -20,10 +26,25 @@ export class FakeSnippetOperations implements SnippetOperations {
     autoBind(this)
   }
 
-  createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.createSnippet(createSnippet)), DELAY)
-    })
+  async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
+    try {
+      const response = await axios.post(
+          BASE_URL, {
+            ...createSnippet,
+            authorId: userId,
+            compliance: 'pending'
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420'
+            },
+          }
+      );
+      return response.data as Snippet;
+    } catch (error) {
+      throw new Error(`Error creating snippet: ${error}`);
+    }
   }
 
   getSnippetById(id: string): Promise<Snippet | undefined> {
@@ -32,29 +53,18 @@ export class FakeSnippetOperations implements SnippetOperations {
     })
   }
 
-/*  listSnippetDescriptors(page: number,pageSize: number): Promise<PaginatedSnippets> {
-    const response: PaginatedSnippets = {
-      page: page,
-      page_size: pageSize,
-      count: 20,
-      snippets: page == 0 ? this.fakeStore.listSnippetDescriptors().splice(0,pageSize) : this.fakeStore.listSnippetDescriptors().splice(1,2)
-    }
-
-    return new Promise(resolve => {
-      setTimeout(() => resolve(response), DELAY)
-    })
-  }*/
-
   async listSnippetDescriptors(page: number, pageSize: number): Promise<PaginatedSnippets> {
     try {
       const response = await axios.get(
         BASE_URL, {
         headers: {
           'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': '69420'
         },
         params: {
-          page: String(page),
+          userId,
+          pageNumber: String(page),
           pageSize: String(pageSize),
         },
       });
@@ -64,10 +74,26 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.updateSnippet(id, updateSnippet)), DELAY)
-    })
+  async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/${id}`, {
+            ...updateSnippet,
+            }, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': '69420'
+            },
+            params: {
+              userId
+            }
+          }
+        );
+        return response.data as Snippet;
+    } catch (error) {
+        throw new Error(`Error updating snippet: ${error}`);
+    }
   }
 
   getUserFriends(name: string = "", page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
@@ -125,10 +151,23 @@ export class FakeSnippetOperations implements SnippetOperations {
     })
   }
 
-  deleteSnippet(id: string): Promise<string> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.deleteSnippet(id)), DELAY)
-    })
+  async deleteSnippet(id: string): Promise<string> {
+    try {
+      const response = await axios.delete(
+        `${BASE_URL}/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420'
+            },
+        params: {
+            userId
+        }},
+      );
+      return response.data as string;
+    } catch (error) {
+        throw new Error(`Error deleting snippet: ${error}`);
+    }
   }
 
   getFileTypes(): Promise<FileType[]> {

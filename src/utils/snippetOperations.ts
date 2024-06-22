@@ -14,6 +14,7 @@ export interface SnippetOperations {
 
   updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet>
 
+  //Pending
   getUserFriends(name?: string,page?: number,pageSize?: number): Promise<PaginatedUsers>
 
   shareSnippet(snippetId: string,userId: string): Promise<Snippet>
