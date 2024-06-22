@@ -16,7 +16,7 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://0e15-201-253-89-27.ngrok-free.app'
+const url = 'https://385c-201-253-89-27.ngrok-free.app'
 const BASE_URL = `${url}/snippets`
 
 export class FakeSnippetOperations implements SnippetOperations {
