@@ -21,7 +21,7 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: austral-tricolor
+          username: ${{ secrets.PUBLISH_USERNAME }}
           password: ${{ secrets.DOCKER_PACKAGES_SECRET }}
 
       - name: Build and push
@@ -30,7 +30,6 @@ jobs:
           tags: |
             ghcr.io/tricolor-austral/printscript-ui:latest
           build-args: |
-            "USERNAME=${{ secrets.PUBLISH_USERNAME }}"
-            "TOKEN=${{ secrets.DOCKER_PACKAGES_SECRET }}"
-
+            USERNAME=${{ secrets.PUBLISH_USERNAME }}
+            TOKEN=${{ secrets.DOCKER_PACKAGES_SECRET }}
           push: true
