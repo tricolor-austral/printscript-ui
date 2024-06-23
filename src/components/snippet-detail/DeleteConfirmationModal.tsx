@@ -11,7 +11,7 @@ type DeleteConfirmationModalProps = {
 }
 export const DeleteConfirmationModal = (props: DeleteConfirmationModalProps) => {
   const {open, onClose, id, setCloseDetails} = props;
-
+  console.log(id)
   const {mutate: deleteSnippet} = useDeleteSnippet({
     onSuccess: async () => {
       onClose();

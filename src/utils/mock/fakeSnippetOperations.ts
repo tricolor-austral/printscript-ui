@@ -16,7 +16,7 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://385c-201-253-89-27.ngrok-free.app'
+const url = 'https://2cfb-201-253-89-27.ngrok-free.app'
 const BASE_URL = `${url}/snippets`
 
 export class FakeSnippetOperations implements SnippetOperations {
@@ -47,10 +47,24 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  getSnippetById(id: string): Promise<Snippet | undefined> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getSnippetById(id)), DELAY)
-    })
+  async getSnippetById(id: string): Promise<Snippet | undefined> {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/byId`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420'
+            },
+        params: {
+          snippetId: id,
+          userId
+        }}
+        );
+        return response.data as Snippet;
+    } catch (error) {
+        throw new Error(`Error fetching snippet: ${error}`);
+    }
   }
 
   async listSnippetDescriptors(page: number, pageSize: number): Promise<PaginatedSnippets> {
@@ -96,17 +110,46 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  getUserFriends(name: string = "", page: number = 1, pageSize: number = 10): Promise<PaginatedUsers> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getUserFriends(name,page,pageSize)), DELAY)
-    })
+  async getUserFriends(page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/users`, {
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': '69420'
+            },
+        params: {
+            pageNumber: page,
+            pageSize
+        }
+        })
+        return response.data as PaginatedUsers;
+    } catch (error) {
+        throw new Error(`Error fetching friends: ${error}`);
+    }
   }
 
-  shareSnippet(snippetId: string): Promise<Snippet> {
-    return new Promise(resolve => {
-      // @ts-expect-error, it will always find it in the fake store
-      setTimeout(() => resolve(this.fakeStore.getSnippetById(snippetId)), DELAY)
-    })
+  async shareSnippet(snippetId: string, friendId: string): Promise<Snippet> {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/share`, {
+          snippetId,
+          friendId
+        }, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json',
+              'ngrok-skip-browser-warning': '69420'
+            },
+            params: {
+              userId
+            }
+          });
+        return response.data as Snippet;
+    } catch (error) {
+        throw new Error(`Error sharing snippet: ${error}`);
+    }
   }
 
   getFormatRules(): Promise<Rule[]> {
@@ -154,13 +197,14 @@ export class FakeSnippetOperations implements SnippetOperations {
   async deleteSnippet(id: string): Promise<string> {
     try {
       const response = await axios.delete(
-        `${BASE_URL}/${id}`, {
+        `${BASE_URL}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
             'ngrok-skip-browser-warning': '69420'
             },
         params: {
+            snippetId: id,
             userId
         }},
       );

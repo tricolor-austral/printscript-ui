@@ -74,7 +74,7 @@ export const SnippetDetail = (props: SnippetDetailProps) => {
       setCode(formatSnippetData)
     }
   }, [formatSnippetData])
-
+  console.log(snippet)
 
   async function handleShareSnippet(userId: string) {
     shareSnippet({snippetId: id, userId})

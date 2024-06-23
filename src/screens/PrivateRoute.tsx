@@ -12,7 +12,7 @@ const PrivateRoute = ({ children }) => {
             try {
                 const accessToken = await getAccessTokenSilently();
                 localStorage.setItem('token', accessToken);
-                localStorage.setItem('userId', JSON.stringify(user?.sub));
+                localStorage.setItem('userId', user?.email as string);
             } catch (error) {
                 console.error('Error getting access token:', error);
             }

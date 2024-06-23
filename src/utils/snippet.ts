@@ -30,7 +30,7 @@ type SnippetStatus = {
   author: string;
 }
 export type PaginatedSnippets = Pagination & {
-  snippets: Snippet[]
+  content: Snippet[]
 }
 
 export const getFileLanguage = (fileTypes: FileType[], fileExt?: string) => {
