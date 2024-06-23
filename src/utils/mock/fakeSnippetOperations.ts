@@ -16,8 +16,9 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://2cfb-201-253-89-27.ngrok-free.app'
-const BASE_URL = `${url}/snippets`
+const url = 'https://7eb6-201-253-89-27.ngrok-free.app'
+const SNIPPET_URL = `${url}/snippets`
+const RUN_URL = `${url}/run`
 
 export class FakeSnippetOperations implements SnippetOperations {
   private readonly fakeStore = new FakeSnippetStore()
@@ -29,7 +30,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async createSnippet(createSnippet: CreateSnippet): Promise<Snippet> {
     try {
       const response = await axios.post(
-          BASE_URL, {
+          SNIPPET_URL, {
             ...createSnippet,
             authorId: userId,
             compliance: 'pending'
@@ -50,7 +51,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async getSnippetById(id: string): Promise<Snippet | undefined> {
     try {
       const response = await axios.get(
-        `${BASE_URL}/byId`, {
+        `${SNIPPET_URL}/byId`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -70,7 +71,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async listSnippetDescriptors(page: number, pageSize: number): Promise<PaginatedSnippets> {
     try {
       const response = await axios.get(
-        BASE_URL, {
+        SNIPPET_URL, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -91,7 +92,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
     try {
         const response = await axios.put(
-            `${BASE_URL}/${id}`, {
+            `${SNIPPET_URL}/${id}`, {
             ...updateSnippet,
             }, {
             headers: {
@@ -113,7 +114,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async getUserFriends(page: number = 0, pageSize: number = 10): Promise<PaginatedUsers> {
     try {
       const response = await axios.get(
-        `${BASE_URL}/users`, {
+        `${SNIPPET_URL}/users`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async shareSnippet(snippetId: string, friendId: string): Promise<Snippet> {
     try {
       const response = await axios.post(
-        `${BASE_URL}/share`, {
+        `${SNIPPET_URL}/share`, {
           snippetId,
           friendId
         }, {
@@ -152,22 +153,65 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  getFormatRules(): Promise<Rule[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getFormatRules()), DELAY)
-    })
+  async getFormatRules(): Promise<Rule[]> {
+    try {
+        const response = await axios.get(
+            `${RUN_URL}/format-rules`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': '69420'
+                },
+            params: {
+                userId
+            }
+            });
+        return response.data as Rule[];
+    } catch (error) {
+        throw new Error(`Error fetching format rules: ${error}`);
+    }
   }
 
-  getLintingRules(): Promise<Rule[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getLintingRules()), DELAY)
-    })
+  async getLintingRules(): Promise<Rule[]> {
+    try {
+        const response = await axios.get(
+            `${RUN_URL}/lint-rules`, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': '69420'
+                },
+            params: {
+                userId
+            }
+            });
+        return response.data as Rule[];
+    } catch (error) {
+        throw new Error(`Error fetching linting rules: ${error}`);
+    }
   }
 
-  formatSnippet(snippetContent: string): Promise<string> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.formatSnippet(snippetContent)), DELAY)
-    })
+  async formatSnippet(snippetId: string, language: string): Promise<string> {
+    try {
+        const response = await axios.put(
+            `${RUN_URL}/format`, {
+                snippetId,
+                language
+            },
+            {
+                headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': '69420'
+                },
+                params: {
+                    userId
+                }
+            });
+            return response.data as string;
+    } catch (error) {
+        throw new Error(`Error formatting snippet: ${error}`);
+    }
   }
 
   getTestCases(): Promise<TestCase[]> {
@@ -197,7 +241,7 @@ export class FakeSnippetOperations implements SnippetOperations {
   async deleteSnippet(id: string): Promise<string> {
     try {
       const response = await axios.delete(
-        `${BASE_URL}`, {
+        `${SNIPPET_URL}`, {
         headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
@@ -220,15 +264,47 @@ export class FakeSnippetOperations implements SnippetOperations {
     })
   }
 
-  modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.modifyFormattingRule(newRules)), DELAY)
-    })
+  async modifyFormatRule(newRules: Rule[]): Promise<Rule[]> {
+    try {
+        const response = await axios.put(
+            `${RUN_URL}/format-rules`, {
+                rules: newRules
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '69420'
+                    },
+                params: {
+                    userId
+                }
+            });
+            return response.data as Rule[];
+    } catch (error) {
+        throw new Error(`Error modifying format rules: ${error}`);
+    }
   }
 
-  modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.modifyLintingRule(newRules)), DELAY)
-    })
+  async modifyLintingRule(newRules: Rule[]): Promise<Rule[]> {
+    try {
+        const response = await axios.put(
+            `${RUN_URL}/lint-rules`, {
+                rules: newRules
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '69420'
+                    },
+                params: {
+                    userId
+                }
+            });
+            return response.data as Rule[];
+    } catch (error) {
+        throw new Error(`Error modifying linting rules: ${error}`);
+    }
   }
 }

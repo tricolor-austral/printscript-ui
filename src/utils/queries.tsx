@@ -44,18 +44,15 @@ export const useShareSnippet = () => {
   );
 };
 
-
 export const useGetTestCases = () => {
   return useQuery<TestCase[] | undefined, Error>(['testCases'], () => snippetOperations.getTestCases(), {});
 };
-
 
 export const usePostTestCase = () => {
   return useMutation<TestCase, Error, Partial<TestCase>>(
       (tc) => snippetOperations.postTestCase(tc)
   );
 };
-
 
 export const useRemoveTestCase = ({onSuccess}: {onSuccess: () => void}) => {
   return useMutation<string, Error, string>(
@@ -75,8 +72,6 @@ export const useTestSnippet = () => {
   )
 }
 
-
-
 export const useGetFormatRules = () => {
   return useQuery<Rule[], Error>('formatRules', () => snippetOperations.getFormatRules());
 }
@@ -88,11 +83,9 @@ export const useModifyFormatRules = ({onSuccess}: {onSuccess: () => void}) => {
   );
 }
 
-
 export const useGetLintingRules = () => {
   return useQuery<Rule[], Error>('lintingRules', () => snippetOperations.getLintingRules());
 }
-
 
 export const useModifyLintingRules = ({onSuccess}: {onSuccess: () => void}) => {
   return useMutation<Rule[], Error, Rule[]>(
@@ -101,9 +94,9 @@ export const useModifyLintingRules = ({onSuccess}: {onSuccess: () => void}) => {
   );
 }
 
-export const useFormatSnippet = () => {
+export const useFormatSnippet = (snippetId: string, language: string) => {
   return useMutation<string, Error, string>(
-      snippetContent => snippetOperations.formatSnippet(snippetContent)
+      () => snippetOperations.formatSnippet(snippetId, language)
   );
 }
 
