@@ -40,28 +40,7 @@ const paginatedUsers: PaginatedUsers = {
   count: 5,
   page: 1,
   page_size: 10,
-  users: [
-    {
-      name: "Chona",
-      id: "1"
-    },
-    {
-      name: "Fede",
-      id: "2"
-    },
-    {
-      name: "Mateo",
-      id: "3"
-    },
-    {
-      name: "Tomi",
-      id: "4"
-    },
-    {
-      name: "Berrets",
-      id: "5"
-    }
-  ]
+  content: ['John Doe', 'Jane Doe', 'John Smith', 'Jane Smith', 'John Johnson']
 }
 
 const INITIAL_FORMATTING_RULES: Rule[] = [
@@ -211,12 +190,12 @@ export class FakeSnippetStore {
     return newSnippet
   }
 
-  getUserFriends(name: string, page: number, pageSize: number) {
+  getUserFriends(page: number, pageSize: number) {
     return {
       ...paginatedUsers,
       page: page,
       pageSize: pageSize,
-      users: paginatedUsers.users.filter(x => x.name.includes(name))
+      users: paginatedUsers.content
     };
   }
 
