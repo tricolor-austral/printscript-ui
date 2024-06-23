@@ -25,6 +25,11 @@ export const Navbar = () => {
     const navigate = useNavigate();
     const { logout } = useAuth0();
 
+    const handleLogout = () => {
+        // @ts-ignore
+        logout({ returnTo: window.location.origin });
+    }
+
     return (
         <AppBar position="static" elevation={0}>
             <Container maxWidth="xl">
@@ -65,7 +70,7 @@ export const Navbar = () => {
                         ))}
                     </Box>
                     <Button color={'info'} variant={"contained"}
-                        sx={{marginLeft: '50%'}} onClick={() => logout()}>
+                        sx={{marginLeft: '50%'}} onClick={handleLogout}>
                         Log out
                     </Button>
                 </Toolbar>
