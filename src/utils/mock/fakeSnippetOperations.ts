@@ -15,8 +15,7 @@ const DELAY: number = 1000;
 const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
-//use localhost
-const url = 'https://7eb6-201-253-89-27.ngrok-free.app'
+const url = 'https://35a3-200-10-109-202.ngrok-free.app'
 const SNIPPET_URL = `${url}/snippets`
 const RUN_URL = `${url}/run`
 
