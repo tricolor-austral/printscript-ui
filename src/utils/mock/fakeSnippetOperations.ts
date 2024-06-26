@@ -16,7 +16,7 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://7eb6-201-253-89-27.ngrok-free.app'
+const url = 'http://operations-api:8080'
 const SNIPPET_URL = `${url}/snippets`
 const RUN_URL = `${url}/run`
 
