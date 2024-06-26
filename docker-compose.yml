@@ -1,11 +1,8 @@
-
+version: '3'
 services:
-  sampleproject:
-    image: "printscript-ui"
+  react-app:
     build:
       context: .
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
+      dockerfile: Dockerfile
     ports:
-      - 3000:3000
+      - "5173:80"

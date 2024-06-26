@@ -50,7 +50,7 @@ const HomeScreen = () => {
       <>
           {isAuthenticated ?
               <>
-            <SnippetTable loading={isLoading} handleClickSnippet={setSnippetId} snippets={data?.snippets}
+            <SnippetTable loading={isLoading} handleClickSnippet={setSnippetId} snippets={data?.content}
                           handleSearchSnippet={handleSearchSnippet}/>
             <Drawer open={!!snippetId} anchor={"right"} onClose={handleCloseModal}>
               {snippetId && <SnippetDetail handleCloseModal={handleCloseModal} id={snippetId}/>}
