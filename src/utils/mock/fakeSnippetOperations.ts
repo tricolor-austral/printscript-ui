@@ -16,7 +16,7 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://ingsis-tricolor.duckdns.org/operations/'
+const url = 'https://ingsis-tricolor.duckdns.org/api/operations'
 const SNIPPET_URL = `${url}/snippets`
 const RUN_URL = `${url}/run`
 
