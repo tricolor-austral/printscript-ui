@@ -15,7 +15,8 @@ const DELAY: number = 1000;
 const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
-const url = 'https://35a3-200-10-109-202.ngrok-free.app'
+//use localhost
+const url = 'https://ingsis-tricolor.duckdns.org/api/operations'
 const SNIPPET_URL = `${url}/snippets`
 const RUN_URL = `${url}/run`
 
