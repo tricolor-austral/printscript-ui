@@ -1,6 +1,8 @@
+import {FRONTEND_URL} from "../../../src/utils/constants";
+
 export function loginViaAuth0Ui(username: string, password: string) {
     // App landing page redirects to Auth0.
-    cy.visit('/');
+    cy.visit(FRONTEND_URL);
 
     // Espera a que aparezca el botón 'Log In'
     cy.wait(1000)
@@ -21,7 +23,7 @@ export function loginViaAuth0Ui(username: string, password: string) {
     cy.wait(1000)
 
     // Ensure Auth0 has redirected us back to the RWA.
-    cy.url().should('equal', 'http://localhost:5173/')
+    cy.url().should('equal', 'https://tricolor-austral.duckdns.org/')
 }
 
 

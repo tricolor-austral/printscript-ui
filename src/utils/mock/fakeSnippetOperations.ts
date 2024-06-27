@@ -276,7 +276,7 @@ export class FakeSnippetOperations implements SnippetOperations {
       }
   }
 
-  async testSnippet(id: string): Promise<TestCaseResult> {
+  async testSnippet(id: string, envVars: string): Promise<TestCaseResult> {
     try {
         const response = await axios.post(
             `${TEST_CASE_URL}/run`, {},{
@@ -286,7 +286,8 @@ export class FakeSnippetOperations implements SnippetOperations {
                 'ngrok-skip-browser-warning': '69420'
                 },
             params: {
-                testCaseId: parseInt(id)
+                testCaseId: parseInt(id),
+                envVars
             },
         });
         return response.data as TestCaseResult;

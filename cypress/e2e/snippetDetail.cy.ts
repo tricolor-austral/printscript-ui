@@ -1,4 +1,4 @@
-import {BACKEND_URL} from "../../src/utils/constants";
+import {BACKEND_URL, FRONTEND_URL} from "../../src/utils/constants";
 
 describe('Add snippet tests', () => {
   beforeEach(() => {
@@ -6,7 +6,7 @@ describe('Add snippet tests', () => {
         "pedropanosyan@gmail.com",
         "Ingsis2024*"
     );
-    cy.visit("/")
+    cy.visit(FRONTEND_URL)
     cy.intercept('GET', BACKEND_URL + "/snippets*", (req) => {
       req.reply((res) => {
         expect(res.statusCode).to.eq(200);

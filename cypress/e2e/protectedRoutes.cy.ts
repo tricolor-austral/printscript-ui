@@ -1,9 +1,9 @@
-import {AUTH0_USERNAME,AUTH0_PASSWORD} from "../../src/utils/constants";
+import {AUTH0_USERNAME, AUTH0_PASSWORD, FRONTEND_URL} from "../../src/utils/constants";
 
 describe('Protected routes test', () => {
   it('should redirect to login when accessing a protected route unauthenticated', () => {
     // Visit the protected route
-    cy.visit('/');
+    cy.visit(FRONTEND_URL);
 
     cy.wait(1000)
 
@@ -13,7 +13,7 @@ describe('Protected routes test', () => {
 
   it('should display login content', () => {
     // Visit the login page
-    cy.visit('/');
+    cy.visit(FRONTEND_URL);
 
     // Look for text that is likely to appear on a login page
     cy.get('#login-button').should('be.visible');
@@ -26,7 +26,7 @@ describe('Protected routes test', () => {
         "Ingsis2024*"
     );
 
-    cy.visit('/');
+    cy.visit(FRONTEND_URL);
 
     cy.wait(1000)
 

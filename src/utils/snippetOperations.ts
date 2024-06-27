@@ -32,7 +32,7 @@ export interface SnippetOperations {
 
   deleteSnippet(id: string): Promise<string>
 
-  testSnippet(id: string): Promise<TestCaseResult>
+  testSnippet(id: string, envVars: string): Promise<TestCaseResult>
 
   getFileTypes(): Promise<FileType[]>
 

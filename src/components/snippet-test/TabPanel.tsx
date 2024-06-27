@@ -15,7 +15,7 @@ type TabPanelProps = {
 export const TabPanel = ({value, index, test: initialTest, setTestCase, removeTestCase}: TabPanelProps) => {
     const [testData, setTestData] = useState<Partial<TestCase> | undefined>(initialTest);
 
-    const {mutateAsync: testSnippet, data} = useTestSnippet(testData?.id ?? "");
+    const {mutateAsync: testSnippet, data} = useTestSnippet(testData?.id ?? "", testData?.envVars ?? "");
 
     return (
         <div
