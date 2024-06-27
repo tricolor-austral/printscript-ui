@@ -87,7 +87,7 @@ export const SnippetTable = (props: SnippetTableProps) => {
               <Search/>
             </IconButton>
           </Box>
-          <Button ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
+          <Button id={'add-snippet-button'} ref={popoverRef} variant="contained" disableRipple sx={{boxShadow: 0}}
                   onClick={() => setPopoverMenuOpened(true)}>
             <Add/>
             Add Snippet

@@ -27,7 +27,7 @@ const PrivateRoute = ({ children }) => {
     return isAuthenticated ? children : (
         <div style={{height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
             <h1>Please login to access resources</h1>
-            <Button variant="contained" onClick={() => loginWithRedirect()}>Login</Button>
+            <Button id={'login-button'} variant="contained" onClick={() => loginWithRedirect()}>Login</Button>
         </div>
     );
 };
