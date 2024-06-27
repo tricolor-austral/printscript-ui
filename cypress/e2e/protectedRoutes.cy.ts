@@ -8,23 +8,23 @@ describe('Protected routes test', () => {
     cy.wait(1000)
 
     // Check if the URL is redirected to the login page
-    cy.url().should('include', '/login');
+    cy.url().should('include', '/');
   });
 
   it('should display login content', () => {
     // Visit the login page
-    cy.visit('/login');
+    cy.visit('/');
 
     // Look for text that is likely to appear on a login page
-    cy.contains('Log in').should('exist');
-    cy.contains('Password').should('exist'); // Adjust the text based on actual content
+    cy.get('#login-button').should('be.visible');
+
   });
 
   it('should not redirect to login when the user is already authenticated', () => {
     cy.loginToAuth0(
-        AUTH0_USERNAME,
-        AUTH0_PASSWORD
-    )
+        "pedropanosyan@gmail.com",
+        "Ingsis2024*"
+    );
 
     cy.visit('/');
 

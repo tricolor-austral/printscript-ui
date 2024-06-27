@@ -18,6 +18,7 @@ const userId = localStorage.getItem('userId')
 //use localhost
 const url = 'https://tricolor-austral.duckdns.org/api/operations'
 const SNIPPET_URL = `${url}/snippets`
+const TEST_CASE_URL = `${url}/test-case`
 const RUN_URL = `${url}/run`
 
 export class FakeSnippetOperations implements SnippetOperations {
@@ -214,22 +215,60 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  getTestCases(): Promise<TestCase[]> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.getTestCases()), DELAY)
-    })
+  async getTestCases(): Promise<TestCase[]> {
+    try {
+        const response = await axios.get(
+            `${TEST_CASE_URL}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '69420'
+                },
+            });
+        return response.data as TestCase[];
+    } catch (error) {
+        throw new Error(`Error fetching test cases: ${error}`);
+    }
   }
 
-  postTestCase(testCase: TestCase): Promise<TestCase> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.postTestCase(testCase)), DELAY)
-    })
+  async postTestCase(testCase: TestCase): Promise<TestCase> {
+      try {
+          console.log(testCase, TEST_CASE_URL)
+            const response = await axios.post(
+                `${TEST_CASE_URL}`, {
+                    ...testCase
+                },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'ngrok-skip-browser-warning': '69420'
+                    },
+                });
+                return response.data as TestCase;
+        } catch (error) {
+            throw new Error(`Error posting test case: ${error}`);
+      }
   }
 
-  removeTestCase(id: string): Promise<string> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.removeTestCase(id)), DELAY)
-    })
+  async removeTestCase(id: string): Promise<string> {
+      //only send body
+      try {
+            const response = await axios.delete(
+                `${TEST_CASE_URL}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': '69420'
+                    },
+                params: {
+                    testCaseId: id
+                }
+            });
+            return response.data as string;
+      } catch (error) {
+          throw new Error(`Error removing test case: ${error}`);
+      }
   }
 
   testSnippet(): Promise<TestCaseResult> {
