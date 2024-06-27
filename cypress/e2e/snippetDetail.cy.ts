@@ -6,9 +6,12 @@ describe('Add snippet tests', () => {
         "pedropanosyan@gmail.com",
         "Ingsis2024*"
     );
-
     cy.visit("/")
-
+    cy.intercept('GET', BACKEND_URL + "/snippets*", (req) => {
+      req.reply((res) => {
+        expect(res.statusCode).to.eq(200);
+      });
+    }).as('getSnippets');
     cy.wait("@getSnippets")
     cy.get('.MuiTableBody-root > :nth-child(1) > :nth-child(1)').click();
   })

@@ -215,10 +215,13 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  async getTestCases(): Promise<TestCase[]> {
+  async getTestCases(snippetId: string): Promise<TestCase[]> {
     try {
         const response = await axios.get(
             `${TEST_CASE_URL}`, {
+                params: {
+                    snippetId
+                },
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -233,11 +236,12 @@ export class FakeSnippetOperations implements SnippetOperations {
 
   async postTestCase(testCase: TestCase): Promise<TestCase> {
       try {
-          console.log(testCase, TEST_CASE_URL)
+          const body = {
+                ...testCase,
+                id: parseInt(testCase.id)
+          }
             const response = await axios.post(
-                `${TEST_CASE_URL}`, {
-                    ...testCase
-                },
+                `${TEST_CASE_URL}`, body,
                 {
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -252,7 +256,6 @@ export class FakeSnippetOperations implements SnippetOperations {
   }
 
   async removeTestCase(id: string): Promise<string> {
-      //only send body
       try {
             const response = await axios.delete(
                 `${TEST_CASE_URL}`, {
@@ -262,7 +265,7 @@ export class FakeSnippetOperations implements SnippetOperations {
                     'ngrok-skip-browser-warning': '69420'
                     },
                 params: {
-                    testCaseId: id
+                    testCaseId: parseInt(id)
                 }
             });
             return response.data as string;
@@ -271,10 +274,23 @@ export class FakeSnippetOperations implements SnippetOperations {
       }
   }
 
-  testSnippet(): Promise<TestCaseResult> {
-    return new Promise(resolve => {
-      setTimeout(() => resolve(this.fakeStore.testSnippet()), DELAY)
-    })
+  async testSnippet(id: string): Promise<TestCaseResult> {
+    try {
+        const response = await axios.post(
+            `${TEST_CASE_URL}/run`, {},{
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'ngrok-skip-browser-warning': '69420'
+                },
+            params: {
+                testCaseId: parseInt(id)
+            },
+        });
+        return response.data as TestCaseResult;
+    } catch (e) {
+        throw new Error(`Error testing snippet: ${e}`);
+    }
   }
 
   async deleteSnippet(id: string): Promise<string> {

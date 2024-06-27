@@ -1,4 +1,4 @@
-import {AUTH0_PASSWORD, AUTH0_USERNAME, BACKEND_URL, FRONTEND_URL} from "../../src/utils/constants";
+import {BACKEND_URL, FRONTEND_URL} from "../../src/utils/constants";
 import {CreateSnippet} from "../../src/utils/snippet";
 
 describe('Home', () => {
@@ -8,10 +8,7 @@ describe('Home', () => {
          'Ingsis2024*'
     )
   })
-  before(() => {
-    process.env.FRONTEND_URL = Cypress.env("FRONTEND_URL");
-    process.env.BACKEND_URL = Cypress.env("BACKEND_URL");
-  })
+
   it('Renders home', () => {
     cy.visit(FRONTEND_URL)
     /* ==== Generated with Cypress Studio ==== */
