@@ -238,7 +238,7 @@ export class FakeSnippetOperations implements SnippetOperations {
       try {
           const body = {
                 ...testCase,
-                id: parseInt(testCase.id)
+                id: parseInt(String(testCase.id))
           }
             const response = await axios.post(
                 `${TEST_CASE_URL}`, body,
