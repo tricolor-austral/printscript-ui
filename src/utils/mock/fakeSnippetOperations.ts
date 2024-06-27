@@ -93,7 +93,8 @@ export class FakeSnippetOperations implements SnippetOperations {
   async updateSnippetById(id: string, updateSnippet: UpdateSnippet): Promise<Snippet> {
     try {
         const response = await axios.put(
-            `${SNIPPET_URL}/${id}`, {
+            `${SNIPPET_URL}`, {
+                id,
             ...updateSnippet,
             }, {
             headers: {
