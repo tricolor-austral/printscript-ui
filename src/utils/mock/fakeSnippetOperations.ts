@@ -230,6 +230,7 @@ export class FakeSnippetOperations implements SnippetOperations {
             });
         return response.data as TestCase[];
     } catch (error) {
+        console.log(error)
         throw new Error(`Error fetching test cases: ${error}`);
     }
   }
