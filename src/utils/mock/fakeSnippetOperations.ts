@@ -193,10 +193,6 @@ export class FakeSnippetOperations implements SnippetOperations {
     }
   }
 
-  async lintSnippet(snippetId: string, language: string): Promise<string> {
-
-  }
-
   async formatSnippet(snippetId: string, language: string): Promise<string> {
     try {
         const response = await axios.put(
