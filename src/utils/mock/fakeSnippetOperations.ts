@@ -16,7 +16,7 @@ const token = localStorage.getItem('token')
 const userId = localStorage.getItem('userId')
 
 //use localhost
-const url = 'https://tricolor-austral.duckdns.org/api/operations'
+const url =  import.meta.env.VITE_API_URL || 'http://localhost:8080'
 const SNIPPET_URL = `${url}/snippets`
 const TEST_CASE_URL = `${url}/test-case`
 const RUN_URL = `${url}/run`
@@ -191,6 +191,10 @@ export class FakeSnippetOperations implements SnippetOperations {
     } catch (error) {
         throw new Error(`Error fetching linting rules: ${error}`);
     }
+  }
+
+  async lintSnippet(snippetId: string, language: string): Promise<string> {
+
   }
 
   async formatSnippet(snippetId: string, language: string): Promise<string> {
